@@ -5,7 +5,6 @@ require_once "classes/user.php";
 
 $bdd = new bdd();
 $bdd->connectBDD();
-
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +15,11 @@ $bdd->connectBDD();
     <title>Accueil</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
+<?php
+//if ($_SESSION["user"]["status"] != admin){echo "LOL NOPE"}else{
+?>
+
 <body>
     <?php include "components/navbar.php" ?>
     <main class="container">
@@ -24,3 +28,7 @@ $bdd->connectBDD();
 </body>
 
 </html>
+
+<?php
+//}
+?>
