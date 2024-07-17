@@ -12,8 +12,8 @@
     </div>
     <div>
         <h3>Mentions</h3>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
-        <p>Maxime veniam perferendis repellat deleniti quisquam cupiditate sequi iure libero quaerat, magnam nemo velit tempore ducimus, rem aliquid dicta dignissimos odio deserunt?</p>
+        <p>Logo : Flower by Amerella Sky from <a href="https://thenounproject.com/browse/icons/term/flower/" target="_blank" title="Flower Icons">Noun Project</a> (CC BY 3.0)</p>
+        <p>e</p>
     </div>
     </div>
 </footer>

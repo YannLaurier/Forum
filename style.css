@@ -156,6 +156,10 @@ button:focus {
     color: var(--accent-1);
 }
 
+#nav ul, #nav p {
+    padding-top: 5px;
+}
+
 footer>div {
     justify-content: space-evenly;
 }

@@ -1,0 +1,5 @@
+PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\xampp\htdocs\Forum\config\config.php:10
+Stack trace:
+#0 C:\xampp\htdocs\Forum\config\config.php(10): PDO->__construct('mysql:host=loca...', 'root', Object(SensitiveParameterValue))
+#1 C:\xampp\htdocs\Forum\index.php(7): bdd->connectBDD()
+#2 {main}\n

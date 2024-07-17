@@ -7,7 +7,7 @@ class bdd
     public function connectBDD()
     {
         try {
-            $this->bdd = new PDO('mysql:host=localhost;dbname=forum', 'root', 'root');
+            $this->bdd = new PDO('mysql:host=localhost;dbname=forum', 'root', '');
             return $this->bdd;
 
         } catch (PDOException $e) {
