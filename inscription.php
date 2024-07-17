@@ -53,6 +53,7 @@ $bdd->disconnectBDD();
 
 <body class="flex column between">
     <?php include "components/navbar.php"; ?>
+    <main>
     <section class="flex container">
         <form action="" method="POST" class="flex column signForm">
             <div class="flex wrap between">
@@ -81,6 +82,7 @@ $bdd->disconnectBDD();
             <button type="submit" name="SignUp">S'inscrire</button>
         </form>
     </section>
+    </main>
     <?php include "components/footer.php"; ?>
 </body>
 

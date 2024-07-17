@@ -36,6 +36,7 @@ $bdd->disconnectBDD();
 
 <body class="flex column between">
     <?php include "components/navbar.php" ?>
+    <main>
     <section class="flex container">
         <form action="" method="POST" class="flex column signForm">
             <div class="flex between">
@@ -52,6 +53,7 @@ $bdd->disconnectBDD();
             <button type="submit" name="SignIn">Se connecter</button>
         </form>
     </section>
+    </main>
     <?php include "components/footer.php" ?>
 </body>
 

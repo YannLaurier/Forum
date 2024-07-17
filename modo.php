@@ -27,7 +27,8 @@ $bdd->disconnectBDD();
         echo "<p class= 'message'>Oops ! You're not allowed to be there. Please depart.</p>";
     } else {
         ?>
-        <main class="container">
+        <main>
+        <div class="container">
             <h1>Moderator Dashboard</h1>
             <p>Moderator has access to all categories and they can :</p>
             <!-- I did the DB yesterday, didn't think of what moderators would actually *do*, and I suspect making moderators for specific categories would require an intermediary table which I really do not want to be adding so moderators have a bit too big of an interaction span with the forum -->
@@ -37,6 +38,7 @@ $bdd->disconnectBDD();
                 <li>Delete topic</li>
                 <li>Delete answer</li>
             </ul>
+            </div>
         </main>
         <?php
     }

@@ -2,6 +2,7 @@
     --text-color: #657b83;
     --dark: #073642;
     --background-color: #fdf6e3;
+    --background-tsp: #fdf6e3ea;
     --light: #eee8d5;
     --accent-1: #93a1a1;
     --red: #dc322f;
@@ -47,7 +48,7 @@ html {
     margin: 0px auto;
 }
 
-main.container {
+main>.container {
     margin: 20px auto;
 }
 
@@ -81,15 +82,26 @@ h3 {
 }
 
 section {
-    background-color: var(--background-color);
+    background-color: var(--background-tsp);
     border-radius: 15px;
     padding: 20px;
     margin: 20px auto 0px auto;
     overflow-x: hidden;
+    backdrop-filter: blur(2px);
 }
 
 body {
+    background: var(--light);
+    background: linear-gradient(0deg, var(--dark) 10%, var(--text-color) 45%, var(--light) 90%);
     min-height: 100vh;
+}
+
+main {
+    background: url('assets/city.png');
+    background-position: 50% -25%;;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 /*forms*/

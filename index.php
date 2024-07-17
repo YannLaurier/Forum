@@ -24,7 +24,8 @@ $bdd->disconnectBDD();
 
 <body class="flex column between">
     <?php include "components/navbar.php" ?>
-    <main class="container">
+    <main >
+        <div class="container">
         <h1>Accueil</h1>
         <section>
             <h2>Posts récents</h2>
@@ -56,6 +57,7 @@ $bdd->disconnectBDD();
             unset($tab);
             ?>
         </section>
+        </div>
     </main>
     <?php include "components/footer.php" ?>
 </body>
