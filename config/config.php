@@ -4,7 +4,6 @@ class bdd
 {
     private $bdd;
 
-    //connexion à BDD
     public function connectBDD()
     {
         try {
@@ -19,13 +18,11 @@ class bdd
         }
     }
 
-    //déconnexion BDD
     public function disconnectBDD()
     {
         $this->bdd = null;
     }
 
-    //compare pseudo & compare email ? comme ça on peut updater individuellement les 2 ? '-'
     public function comparePseudo($param = ""): bool
     {
         $sql = $this->bdd->prepare('SELECT * FROM user WHERE pseudo = :pseudo');
@@ -54,7 +51,6 @@ class bdd
         return $result;
     }
 
-    //AddUser
     public function addUser(user $user)
     {
         try {
@@ -94,4 +90,109 @@ class bdd
             fclose($error);
         }
     }
+
+    public function bringCats(){
+        $sql = 'SELECT * FROM cat';
+        $cats = $this->bdd->query($sql);
+        return $cats->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function bringSubCats(){
+        $sql = 'SELECT * FROM subcat';
+        $subcats = $this->bdd->query($sql);
+        return $subcats->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addCat($param =""){
+        try {
+            $this->bdd->beginTransaction();
+            $catname = $param;
+
+            $sql = $this->bdd->prepare('INSERT INTO cat(title) VALUES (:catname)');
+            $sql->bindParam(':catname', $catname);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function addSubCat($param = []){
+        try {
+            $this->bdd->beginTransaction();
+            $NewSubCat = $param["NewSubCat"];
+            $motherCat = $param["MotherCat"];
+
+            $sql = $this->bdd->prepare('INSERT INTO subcat(title, FK_mother_cat) VALUES (:NewSubCat, :motherCat)');
+            $sql->bindParam(':NewSubCat', $NewSubCat);
+            $sql->bindParam(':motherCat', $motherCat);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function deleteCat($param){
+        try {
+            $this->bdd->beginTransaction();
+            $DyingCat = $param;
+
+            $sql2 = $this->bdd->prepare('DELETE FROM subcat WHERE FK_mother_cat = :dyingcat');
+            $sql2->bindParam(':dyingcat', $DyingCat);
+            $sql2->execute();
+            $sql = $this->bdd->prepare('DELETE FROM cat WHERE id = :dyingcat');
+            $sql->bindParam(':dyingcat', $DyingCat);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function deleteSubCat($param){
+        try {
+            $this->bdd->beginTransaction();
+            $DyingSubCat = $param;
+
+            $sql = $this->bdd->prepare('DELETE FROM subcat WHERE id = :dyingsubcat');
+            $sql->bindParam(':dyingsubcat', $DyingSubCat);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    // public function updateCat($param){
+    //     try{
+    //         $this->bdd->beginTransaction();
+    //         $growingCat = $param;
+
+    //         $sql = $this->bdd->prepare('UPDATE cat SET title = :growingCat')
+
+    //     } catch (\Throwable $th) {
+    //         $this->bdd->rollBack();
+    //         $error = fopen("error.txt", "w");
+    //         $txt = $th->getMessage();
+    //         fwrite($error, $txt);
+    //         fclose($error);
+    //     }
+    // }
 }

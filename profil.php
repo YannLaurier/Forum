@@ -12,7 +12,7 @@ session_start()
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="flex column between">
     <?php include "components/navbar.php";
     ?>
     <main class="container">
@@ -39,6 +39,7 @@ session_start()
             <button class="tinyGuy">Voir tous</button>
         </section>
     </main>
+    <?php include "components/footer.php" ?>
 </body>
 
 </html>

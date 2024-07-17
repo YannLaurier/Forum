@@ -37,6 +37,8 @@ if(isset($_POST["SignUp"])){
 }
 }
 
+$bdd->disconnectBDD();
+
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +51,8 @@ if(isset($_POST["SignUp"])){
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <?php include "components/navbar.php" ?>
+<body class="flex column between">
+    <?php include "components/navbar.php"; ?>
     <section class="flex container">
         <form action="" method="POST" class="flex column signForm">
             <div class="flex wrap between">
@@ -79,6 +81,7 @@ if(isset($_POST["SignUp"])){
             <button type="submit" name="SignUp">S'inscrire</button>
         </form>
     </section>
+    <?php include "components/footer.php"; ?>
 </body>
 
 </html>

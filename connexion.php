@@ -19,9 +19,10 @@ if(isset($_POST["SignIn"])){
     }
 
     ;
-    // header('Location: index.php');
+    header('Location: index.php');
 }
 
+$bdd->disconnectBDD();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@ if(isset($_POST["SignIn"])){
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="flex column between">
     <?php include "components/navbar.php" ?>
     <section class="flex container">
         <form action="" method="POST" class="flex column signForm">
@@ -51,6 +52,7 @@ if(isset($_POST["SignIn"])){
             <button type="submit" name="SignIn">Se connecter</button>
         </form>
     </section>
+    <?php include "components/footer.php" ?>
 </body>
 
 </html>

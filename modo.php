@@ -19,7 +19,7 @@ $bdd->disconnectBDD();
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="flex column between">
     <?php include "components/navbar.php";
     if (!isset($_SESSION["user"])) {
         echo "<p class= 'message'>Oops ! It appears you're disconnected. Please log in.</p>";
@@ -40,7 +40,7 @@ $bdd->disconnectBDD();
         </main>
         <?php
     }
-    ?>
+    include "components/footer.php" ?>
 </body>
 
 </html>

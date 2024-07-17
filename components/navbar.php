@@ -1,6 +1,6 @@
 <div id="nav" class="flex">
-    <div id="navbar" class="flex container between">
-        <ul class="flex">
+    <div class="flex container between pad-10">
+        <ul class="flex gap-10">
             <li><a href="index.php">Accueil</a></li>
             <?php if (isset($_SESSION["user"])) {
                 echo '<li><a href="logout.php">Déconnexion</a></li>';

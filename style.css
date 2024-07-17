@@ -47,14 +47,36 @@ html {
     margin: 0px auto;
 }
 
+main.container {
+    margin: 20px auto;
+}
+
 .text_right {
     text-align: right;
 }
 
+.pad-10 {
+    padding: 10px;
+}
+
+.gap-10 {
+    gap: 10px;
+}
 /*HTML elements*/
+h1 {
+    font-size : 30px;
+    text-align: center;
+    color: var(--dark);
+}
 
 h2 {
     font-size: 25px;
+    color: var(--dark);
+    padding-bottom: 20px;
+}
+
+h3 {
+    font-size: 18px;
     color: var(--dark);
 }
 
@@ -63,6 +85,11 @@ section {
     border-radius: 15px;
     padding: 20px;
     margin: 20px auto 0px auto;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
 }
 
 /*forms*/
@@ -108,21 +135,30 @@ button:focus {
     text-align: center;
 }
 
-/*navbar*/
-#nav {
+/*navbar + footer*/
+#nav, footer {
     background: var(--dark);
     font-weight: bold;
 }
-#nav a {
+#nav a, footer a {
     color: var(--accent-1);
 }
 
-#navbar {
-    padding: 10px;
+footer>div {
+    justify-content: space-evenly;
 }
 
-#navbar ul {
-    gap: 10px;
+footer>div>*{
+    width: 30%;
+}
+
+footer p, footer a{
+    font-size: 13px;
+    font-weight: normal;
+}
+
+footer h3 {
+    color: var(--light);
 }
 
 /*profile*/
@@ -143,11 +179,41 @@ button:focus {
 }
 
 .tinyGuy {
-    margin-right: 20px;
+    margin: 0;
     font-size: 13px;
-    font-weight: bold;
-    background-color: var(--light);
-    color: var(--text-color);
+    padding: 5px 10px;
+    background-color: var(--accent-1);
+    color: var(--light);
     width: fit-content;
-    border-radius: 10px;
+    border-radius: 5px;
+}
+
+.dark .tinyGuy {
+    background-color: var(--text-color);
+}
+
+.list {
+    align-content: center;
+    width: 880px;
+    max-width: 100vw;
+    position: relative;
+    left: -20px;
+    border-bottom : 1px solid var(--text-color);
+}
+
+.dark {
+    background: var(--accent-1);
+    border-bottom : none;
+    margin-top: 5px;
+}
+
+.list:last-child {
+    border-bottom: none;
+}
+
+select {
+    padding: 5px;
+    border-radius: 5px;
+    background: var(--light);
+    border: 1px solid var(--text-color);
 }
