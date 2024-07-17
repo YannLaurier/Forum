@@ -16,16 +16,24 @@ if(isset($_POST["SignUp"])){
 
     if (!empty($pass) && !empty($pass2) && !empty($email) && !empty($email2)) {
         if ($pass === $pass2 && $email === $email2) {
+            $pseudoCheck = $bdd->comparePseudo($pseudo);
+            $emailCheck = $bdd->compareEmail($email);
+            
+            if($pseudoCheck === true){
+                $message = "Pseudo déjà en usage, sois plus original (ou moins concis)";
+            }elseif($emailCheck === true){
+                $message = "C'est le mail de quelqu'un d'autre ça, inscris-toi avec le tien";
+            }else{
             $newUser = new user;
             $newUser->setPseudo($pseudo);
             $newUser->setEmail($email);
             $newUser->setPass(password_hash($pass, PASSWORD_BCRYPT));
             $bdd->addUser($newUser);
-            $message = "bienvenue dans la zone";
             header('Location: index.php');
+            }
     }else{$message = "entre deux fois le même email et deux fois le même mdp frangin";}
 }else{
-    $message ="mais remplis tout là espèce de flan";
+    $message ="Tous les champs ne sont pas remplis";
 }
 }
 

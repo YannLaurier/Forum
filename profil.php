@@ -29,7 +29,7 @@ session_start()
         </section>
         <section id="recent_posts" class="flex column">
             <h2 class="text_right">Derniers posts</h2>
-            <!--idk how but display only the like 5 most recent posts. Would probably fetch data w PHP then order w js ? [gridjs table type plugin maybe ?]
+            <!--idk how but display only the like 5 most recent posts. Would probably fetch data w PHP then order w js ? [gridjs table type plugin maybe ? but like find a better one iykyk]
             Also text should be shortened after a certain max length, or maybe just display title w/ date, time, sous-cat ?-->
             <button class="tinyGuy">Voir tous</button>
         </section>

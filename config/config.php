@@ -25,6 +25,35 @@ class bdd
         $this->bdd = null;
     }
 
+    //compare pseudo & compare email ? comme ça on peut updater individuellement les 2 ? '-'
+    public function comparePseudo($param = ""): bool
+    {
+        $sql = $this->bdd->prepare('SELECT * FROM user WHERE pseudo = :pseudo');
+        $sql->bindParam(':pseudo', $param);
+        $sql->execute();
+        $row = $sql->rowCount();
+        if($row === 0) {
+            $result = false;
+        } else {
+            $result = true;
+        };
+        return $result;
+    }
+
+    public function compareEmail($param = ""): bool
+    {
+        $sql = $this->bdd->prepare('SELECT * FROM user WHERE email = :email');
+        $sql->bindParam(':email', $param);
+        $sql->execute();
+        $row = $sql->rowCount();
+        if($row === 0) {
+            $result = false;
+        } else {
+            $result = true;
+        };
+        return $result;
+    }
+
     //AddUser
     public function addUser(user $user)
     {
@@ -49,17 +78,16 @@ class bdd
             fwrite($error, $txt);
             fclose($error);
         }
-
     }
 
     public function connectUser($pseudo)
     {
-        try{
-        $sql = $this->bdd->prepare("SELECT * FROM user WHERE Pseudo = :pseudo");
-        $sql->bindParam(':pseudo', $pseudo);
-        $sql->execute();
-        return $sql->fetch(PDO::FETCH_ASSOC);
-        }catch (\Throwable $th) {
+        try {
+            $sql = $this->bdd->prepare("SELECT * FROM user WHERE Pseudo = :pseudo");
+            $sql->bindParam(':pseudo', $pseudo);
+            $sql->execute();
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
             fwrite($error, $txt);
