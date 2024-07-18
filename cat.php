@@ -8,8 +8,7 @@ $bdd->connectBDD();
 $cats = $bdd->bringCats();
 $subcats = $bdd->bringSubCats();
 
-$dracula = $_SERVER['REQUEST_URI'];
-$num = substr($dracula, -1);
+$num = $_GET["id"];
 settype($num, "integer");
 
 

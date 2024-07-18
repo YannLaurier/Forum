@@ -1,16 +1,18 @@
 <?php
 session_start();
 require_once "classes/user.php";
+require_once "classes/post.php";
 
 $bdd = new bdd();
 $bdd->connectBDD();
 
 $subcats = $bdd->bringSubCats();
+$posts = $bdd->bringPosts();
 
-$dracula = $_SERVER['REQUEST_URI'];
-$num = substr($dracula, -1);
+$numAns = $bdd->countAns();
+
+$num = $_GET["id"];
 settype($num, "integer");
-
 
 $bdd->disconnectBDD();
 ?>
@@ -42,12 +44,10 @@ $bdd->disconnectBDD();
             }
             ?></h1>
             <section>
-                <p class="p-10">
-                The posts are going to be in there when I actually have them o/
-                Insert here normal forum warning about checking your topic is not redundant before posting, or whatever
-                <button type="button" class="open" popovertarget="newPostForm" >New post</button>
+                <p class="p-10"> Merci de bien vouloir payer attention aux topics existants et bien vérifier que votre topic ne fait pas doublon avec un autre. Merci de bien vouloir contacter l'admin pour détails y afférents.</p>
+                <button type="button" class="open" popovertarget="newPostForm">New post</button>
                 <dialog id="popover" class="pad-10" popover>
-                    <form method = "POST" action="actions/addPost" class="flex column">
+                    <form method = "POST" action="actions/addPost.php" class="flex column">
                         <div class="flex">
                             <input type="text" name="title" placeholder="Titre du sujet">
                             <button type="button" class="close">
@@ -55,21 +55,22 @@ $bdd->disconnectBDD();
                             </button>
                         </div>
                         <textarea name="content" id="" placeholder="Tapez des détails ici..."></textarea>
-                        <button type="submit" name="AddPost">Poster</button>
+                        <button type="submit" name="AddPost" value="<?php echo $num ?>">Poster</button>
                     </form>
                 </dialog>
+                </section>
+                <section>
                 <?php
-                // foreach ($subcats as $tab) {
-                //     if ($tab["FK_mother_cat"] === $num) {
-                //         echo '<form action="actions/deleteSubCat.php" class="flex between list pad-10" method = "POST">
-                //                 <p>' . $tab["title"] . '</p>
-                //                 <div class="flex gap-10">
-                //                     <button type="button" name="EditSubCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
-                //                     <button type="submit" name="DeleteSubCat" value="' . $tab["title"] . '" class="tinyGuy">Supprimer</button>
-                //                 </div>
-                //             </form>';
-                //     }
-                // }
+                foreach ($posts as $tab) {
+                     if ($tab["FK_category_id"] === $num) {
+                         ?>
+                         <div class="flex list pad-10">
+                            <p><a href="posts.php?id=<?php echo $tab["id"] ?>"><?php echo $tab["title"]; ?></a></p>
+                            <p><?php ?></p>
+                        </div>
+                         <?php
+                     }
+                }
                 ?>
                 </p>
             </section>

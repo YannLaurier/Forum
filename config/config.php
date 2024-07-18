@@ -93,6 +93,20 @@ class bdd
         }
     }
 
+    public function bringUsers(){
+        try {
+            $sql = 'SELECT * FROM user';
+            $users = $this->bdd->query($sql);
+            return $users->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
     public function bringCats()
     {
         try {
@@ -257,7 +271,6 @@ class bdd
         try{
             $this->bdd->beginTransaction();
             $fallenMod = $param;
-            var_dump($param);
 
             $sql = $this->bdd->prepare('UPDATE user SET status = "user" WHERE Pseudo = :fallenMod');
             $sql->bindParam(':fallenMod', $fallenMod);
@@ -265,6 +278,99 @@ class bdd
             
             $this->bdd->commit();
         }catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function bringPosts(){
+        try {
+            $sql = 'SELECT * FROM posts';
+            $allPosts = $this->bdd->query($sql);
+            return $allPosts->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function addPost(post $post)
+    {
+        try {
+            $this->bdd->beginTransaction();
+            $author = $post->getAuthor();
+            $subcat = $post->getSubCat();
+            $title = $post->getTitle();
+            $content = $post->getContent();
+
+            $sql = $this->bdd->prepare('INSERT INTO posts(FK_author_id, FK_category_id, title, content) VALUES (:author, :subcat, :title, :content)');
+            $sql->bindParam(':author', $author);
+            $sql->bindParam(':subcat', $subcat);
+            $sql->bindParam(':title', $title);
+            $sql->bindParam(':content', $content);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function countAns(){
+        try {
+            $sql = 'SELECT FK_post_id, COUNT(*) FROM `answers` GROUP BY Fk_post_id';
+            $numAns = $this->bdd->query($sql);
+            return $numAns->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function bringAns($param){
+        try {
+            $num = $param;
+
+            $sql = $this->bdd->prepare('SELECT * FROM `answers` WHERE Fk_post_id = :num');
+            $sql->bindParam(':num', $num);
+            $allAns = $this->bdd->query($sql);
+            return $allAns->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function addAns(answer $ans)
+    {
+        try {
+            $this->bdd->beginTransaction();
+            $content = $ans->getContent();
+            $author = $ans->getAuthor();
+            $post = $ans->getPost();
+
+            $sql = $this->bdd->prepare('INSERT INTO answers(content, FK_author_id, FK_post_id) VALUES (:content, :author, :post)');
+            $sql->bindParam(':content', $content);
+            $sql->bindParam(':author', $author);
+            $sql->bindParam(':post', $post);
+            $sql->execute();
+            $this->bdd->commit();
+        } catch (\Throwable $th) {
             $this->bdd->rollBack();
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
