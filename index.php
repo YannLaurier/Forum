@@ -29,28 +29,16 @@ $bdd->disconnectBDD();
         <h1>Accueil</h1>
         <section>
             <h2>Posts récents</h2>
-                <!-- how do I drag w JS data that is accessible only through php ? Can I display this with php ? This counts as dynamic doesn't it ?-->
+                <!-- how do I drag w JS data that is accessible only through php ? Can I even display this with php ? This counts as dynamic doesn't it ?-->
         </section>
         <section>
             <h2>Toutes les catégories</h2>
             <?php
             foreach ($cats as $tab) {
-                echo '<form class="flex between list pad-10 dark" method = "POST">
-                        <h3>' . $tab["title"] . '</h3>
-                        <div class="flex gap-10">
-                            <button type="submit" name="EditCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
-                            <button type="submit" name="DeleteCat" value="' . $tab["title"] . '" class="tinyGuy">Supprimer</button>
-                        </div>
-                    </form>';
+                echo '<h3 class="dark list pad-10"><a href="cat.php?id='.$tab["id"].'">' . $tab["title"] . '</a></h3>';
                 foreach ($subcats as $tab2) {
                     if ($tab["id"] === $tab2["FK_mother_cat"]) {
-                        echo '<form class="flex between list pad-10" method = "POST">
-                                <p>' . $tab2["title"] . '</p>
-                                <div class="flex gap-10">
-                                    <button type="submit" name="EditSubCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
-                                    <button type="submit" name="DeleteSubCat" value="' . $tab2["title"] . '" class="tinyGuy">Supprimer</button>
-                                </div>
-                            </form>';
+                        echo '<p class="list pad-10" ><a href="subcat.php?id='.$tab2["id"].'">' . $tab2["title"] . '</p>';
                     }
                 }
             }

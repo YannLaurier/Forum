@@ -7,7 +7,7 @@ class bdd
     public function connectBDD()
     {
         try {
-            $this->bdd = new PDO('mysql:host=localhost;dbname=forum', 'root', '');
+            $this->bdd = new PDO('mysql:host=localhost;dbname=forum', 'root', 'root');
             return $this->bdd;
 
         } catch (PDOException $e) {
@@ -29,11 +29,12 @@ class bdd
         $sql->bindParam(':pseudo', $param);
         $sql->execute();
         $row = $sql->rowCount();
-        if($row === 0) {
+        if ($row === 0) {
             $result = false;
         } else {
             $result = true;
-        };
+        }
+        ;
         return $result;
     }
 
@@ -43,11 +44,12 @@ class bdd
         $sql->bindParam(':email', $param);
         $sql->execute();
         $row = $sql->rowCount();
-        if($row === 0) {
+        if ($row === 0) {
             $result = false;
         } else {
             $result = true;
-        };
+        }
+        ;
         return $result;
     }
 
@@ -91,19 +93,38 @@ class bdd
         }
     }
 
-    public function bringCats(){
-        $sql = 'SELECT * FROM cat';
-        $cats = $this->bdd->query($sql);
-        return $cats->fetchAll(PDO::FETCH_ASSOC);
+    public function bringCats()
+    {
+        try {
+            $sql = 'SELECT * FROM cat';
+            $cats = $this->bdd->query($sql);
+            return $cats->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
     }
 
-    public function bringSubCats(){
-        $sql = 'SELECT * FROM subcat';
-        $subcats = $this->bdd->query($sql);
-        return $subcats->fetchAll(PDO::FETCH_ASSOC);
+    public function bringSubCats()
+    {
+        try {
+            $sql = 'SELECT * FROM subcat';
+            $subcats = $this->bdd->query($sql);
+            return $subcats->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
     }
 
-    public function addCat($param =""){
+    public function addCat($param = "")
+    {
         try {
             $this->bdd->beginTransaction();
             $catname = $param;
@@ -121,7 +142,8 @@ class bdd
         }
     }
 
-    public function addSubCat($param = []){
+    public function addSubCat($param = [])
+    {
         try {
             $this->bdd->beginTransaction();
             $NewSubCat = $param["NewSubCat"];
@@ -141,7 +163,8 @@ class bdd
         }
     }
 
-    public function deleteCat($param){
+    public function deleteCat($param)
+    {
         try {
             $this->bdd->beginTransaction();
             $DyingCat = $param;
@@ -162,7 +185,8 @@ class bdd
         }
     }
 
-    public function deleteSubCat($param){
+    public function deleteSubCat($param)
+    {
         try {
             $this->bdd->beginTransaction();
             $DyingSubCat = $param;
@@ -195,4 +219,57 @@ class bdd
     //         fclose($error);
     //     }
     // }
+
+    public function bringMods()
+    {
+        try {
+            $sql = 'SELECT * FROM user WHERE status = "modo"';
+            $allMods = $this->bdd->query($sql);
+            return $allMods->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function addMod($param){
+        try{
+            $this->bdd->beginTransaction();
+            $newMod = $param;
+
+            $sql = $this->bdd->prepare('UPDATE user SET status = "modo" WHERE Pseudo = :newMod');
+            $sql->bindParam(':newMod', $newMod);
+            $sql->execute();
+            $this->bdd->commit();
+        }catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public function deleteMod($param){
+        try{
+            $this->bdd->beginTransaction();
+            $fallenMod = $param;
+            var_dump($param);
+
+            $sql = $this->bdd->prepare('UPDATE user SET status = "user" WHERE Pseudo = :fallenMod');
+            $sql->bindParam(':fallenMod', $fallenMod);
+            $sql->execute();
+            
+            $this->bdd->commit();
+        }catch (\Throwable $th) {
+            $this->bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
 }
