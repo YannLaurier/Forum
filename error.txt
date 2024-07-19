@@ -1,0 +1,1 @@
+PDO::query(): Argument #1 ($query) must be of type string, PDOStatement given

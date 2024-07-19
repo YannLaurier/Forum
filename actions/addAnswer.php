@@ -7,11 +7,12 @@ $bdd = new bdd();
 $bdd->connectBDD();
 
 if (isset($_POST["addAnswer"])) {
-
-    if (!empty($title) && !empty($content)) {
-        $content = $_POST["AnsContent"];
+    $content = $_POST["AnsContent"];
         $author = $_SESSION["user"]["id"];
         $post = $_POST["addAnswer"];
+        var_dump($_POST);
+
+    if (!empty($content)) {
 
         $newAns = new answer;
         $newAns->setContent($content);

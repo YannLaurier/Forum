@@ -343,12 +343,12 @@ class bdd
         try {
             $num = $param;
 
-            $sql = $this->bdd->prepare('SELECT * FROM `answers` WHERE Fk_post_id = :num');
+            $sql = $this->bdd->prepare('SELECT pseudo, Profile_pic, user.id, content, time, FK_post_id FROM user INNER JOIN answers ON user.id = answers.FK_author_id WHERE FK_post_id = :num; ORDER BY time DESC');
             $sql->bindParam(':num', $num);
             $allAns = $this->bdd->query($sql);
+
             return $allAns->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
-            $this->bdd->rollBack();
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
             fwrite($error, $txt);
