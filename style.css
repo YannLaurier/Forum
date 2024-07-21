@@ -64,29 +64,7 @@ main>.container {
     gap: 10px;
 }
 
-/*HTML elements*/
-h1 {
-    font-size: 30px;
-    text-align: center;
-    color: var(--dark);
-}
-
-h2 {
-    font-size: 25px;
-    color: var(--dark);
-    padding-bottom: 20px;
-}
-
-h3 {
-    font-size: 18px;
-    color: var(--dark);
-}
-
-h3>a,
-h2>a {
-    color: var(--dark);
-}
-
+/*General elements*/
 section {
     background-color: var(--background-tsp);
     border-radius: 15px;
@@ -112,6 +90,32 @@ main {
     background-attachment: fixed;
 }
 
+/*titles*/
+
+h1 {
+    font-size: 30px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 25px;
+    padding-bottom: 20px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h1,
+h2,
+h3,
+h2>a,
+h3>a {
+    color: var(--dark);
+}
+
+/*popovers*/
+
 dialog {
     margin: auto;
     width: 75%;
@@ -130,7 +134,7 @@ dialog textarea {
     min-height: 200px;
 }
 
-:backdrop{
+:backdrop {
     color: var(--dark);
     opacity: 1;
 }
@@ -148,11 +152,11 @@ button.close {
     border-radius: 0px;
 }
 
-button.close:focus{
+button.close:focus {
     box-shadow: none;
 }
 
-button.close>svg>path:active{
+button.close>svg>path:active {
     fill: var(--text-color);
 }
 
@@ -169,13 +173,13 @@ textarea {
 }
 
 .miniInput {
-    width: 96%;
-    margin: auto;
-
+    width: 97%;
+    margin: 0 auto auto auto;
 }
 
 .bigInput {
-    width: 100%;
+    width: 97%;
+    margin: auto;
 }
 
 button {
@@ -195,48 +199,48 @@ button:focus {
     box-shadow: inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
+/*messages to user*/
+
 .message {
     color: var(--red);
     font-style: italic;
     text-align: center;
 }
 
+.thisEmptyMessage {
+    font-style: italic;
+    text-align: center;
+}
+
 /*navbar + footer*/
-#nav,
-footer {
+.dark_section {
     background: var(--dark);
     font-weight: bold;
 }
 
-#nav a,
-footer a {
+.dark_section a {
     color: var(--accent-1);
 }
 
-#nav ul,
-#nav p {
+.dark_section ul,
+.dark_section p {
     padding-top: 5px;
 }
 
-footer>div {
-    justify-content: space-evenly;
-}
-
-footer>div>* {
-    width: 30%;
-}
-
-footer p,
-footer a {
+footer :not(h3) {
     font-size: 13px;
     font-weight: normal;
+}
+
+footer p {
+    text-align: center;
 }
 
 footer h3 {
     color: var(--light);
 }
 
-#logo{
+#logo {
     margin: 0px 0px 0px 10px;
     padding: 0px;
     background: transparent;
@@ -244,16 +248,18 @@ footer h3 {
     height: 50px;
 }
 
-#logo:focus{
+#logo:focus {
     box-shadow: none;
 }
 
-#logo:hover{
+#logo:hover {
     box-shadow: 0px 0px 5px 2px var(--light);
     animation-delay: 0.5s;
 }
 
-/* #links{
+/*
+note : that's for the js onclick navbar thing
+#links{
     width: 0px;
     display: none;
 } */
@@ -264,7 +270,8 @@ footer h3 {
     max-width: 400px;
 }
 
-#user_info img {
+#user_info img,
+.answers img {
     border-radius: 500px;
     width: 150px;
     height: 150px;
@@ -314,6 +321,12 @@ select {
     background: var(--light);
     border: 1px solid var(--text-color);
 }
+
+/*answers*/
+.ansPseudo {
+    text-align: center;
+}
+
 
 
 @media (min-width: 640px) {

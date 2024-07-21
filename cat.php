@@ -1,18 +1,19 @@
 <?php
 session_start();
-require_once "classes/user.php";
+require_once "config\BddManager.php";
+require_once "classes\User.php";
+require_once "classes\Cat.php";
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$bdd = new BddManager();
+$bdd = $bddManager->connectBDD();
 
-$cats = $bdd->bringCats();
-$subcats = $bdd->bringSubCats();
+$subcatId = $_GET["id"];
+settype($subcatId, "integer");
 
-$num = $_GET["id"];
-settype($num, "integer");
+$cats = Cat::bringCats($bdd);
+$subcats = Subcat::bringSubCats($bbd, $subcatId);
 
-
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +23,7 @@ $bdd->disconnectBDD();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
     foreach ($cats as $tab) {
-        if ($tab["id"] === $num) {
+        if ($tab["id"] === $subcatId) {
             echo $tab["title"];
         }
     }
@@ -36,7 +37,7 @@ $bdd->disconnectBDD();
         <div class="container">
             <h1><?php
             foreach ($cats as $tab) {
-                if ($tab["id"] === $num) {
+                if ($tab["id"] === $subcatId) {
                     echo $tab["title"];
                 }
             }
@@ -44,8 +45,8 @@ $bdd->disconnectBDD();
             <section>
                 <p class="p-10">
                 <?php
+                if(!empty($subcats)){
                 foreach ($subcats as $tab) {
-                    if ($tab["FK_mother_cat"] === $num) {
                         echo '<form action="actions/deleteSubCat.php" class="flex between list pad-10" method = "POST">
                                 <p>' . $tab["title"] . '</p>
                                 <div class="flex gap-10">
@@ -54,6 +55,9 @@ $bdd->disconnectBDD();
                                 </div>
                             </form>';
                     }
+                    
+                }else{
+                    echo "<p class='thisEmptyMessage'>Il n'y a pas encore de sous-catégories ici. Reviens dans un moment !</p>";
                 }
                 ?>
                 </p>

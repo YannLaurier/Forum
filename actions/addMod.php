@@ -1,15 +1,17 @@
 <?php
 session_start();
-require_once "../config/config.php" ;
-$bdd=new bdd();
-$bdd->connectBDD();
+require_once "../config/BddManager.php" ;
+require_once "../classes/User.php";
+
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
 if(isset($_POST["AddMod"])){
     $newModName = $_POST["newModName"];
 
     unset($tab);
-    $bdd->addMod($newModName);
+    User::addMod($bdd, $newModName);
     header('Location:../admin.php');
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();

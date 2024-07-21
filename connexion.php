@@ -1,9 +1,10 @@
 <?php 
 session_start();
-require_once "config/config.php";
+require_once "config\BddManager.php";
+require_once "classes\User.php";
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 $message="";
 
 if(isset($_POST["SignIn"])){
@@ -11,18 +12,16 @@ if(isset($_POST["SignIn"])){
     $pass = htmlspecialchars($_POST["pass"]);
 
     if (!empty($pseudo) && !empty($pass)) {
-        $user = $bdd->connectUser($pseudo);
+        $user = User::connectUser($bdd, $pseudo);
         if ($user) {
             $_SESSION["user"] = $user;
-            header("Location: profil.php");
+            header("Location: profil.php?pseudo=".$_SESSION["user"]["pseudo"]);
         }
     }
-
-    ;
     header('Location: index.php');
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 ?>
 <!DOCTYPE html>
 <html lang="en">

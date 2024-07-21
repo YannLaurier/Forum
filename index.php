@@ -1,15 +1,17 @@
 <?php
 session_start();
+require_once "config\BddManager.php";
+require_once "classes\User.php";
+require_once "classes\Cat.php";
+require_once "classes\Subcat.php";
 
-require_once "classes/user.php";
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$cats = Cat::bringCats($bdd);
+$subcats = Subcat::bringSubCats($bdd);
 
-$cats = $bdd->bringCats();
-$subcats = $bdd->bringSubCats();
-
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 ?>
 
 <!DOCTYPE html>

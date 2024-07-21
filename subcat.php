@@ -1,20 +1,23 @@
 <?php
 session_start();
-require_once "classes/user.php";
-require_once "classes/post.php";
+require_once "config/BddManager.php";
+require_once "classes/User.php";
+require_once "classes/Post.php";
+require_once "classes/Subcat.php";
+require_once "classes/Answer.php";
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
-$subcats = $bdd->bringSubCats();
-$posts = $bdd->bringPosts();
+$subcats = Subcat::bringSubCats($bdd);
+$posts = Post::bringPosts($bdd);
 
-$numAns = $bdd->countAns();
+$numberAns = Answer::countAns($bdd);
 
-$num = $_GET["id"];
-settype($num, "integer");
+$subCatId = $_GET["id"];
+settype($subCatId, "integer");
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +27,7 @@ $bdd->disconnectBDD();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
     foreach ($subcats as $tab) {
-        if ($tab["id"] === $num) {
+        if ($tab["id"] === $subCatId) {
             echo $tab["title"];
         }
     }
@@ -38,7 +41,7 @@ $bdd->disconnectBDD();
         <div class="container">
             <h1><?php
             foreach ($subcats as $tab) {
-                if ($tab["id"] === $num) {
+                if ($tab["id"] === $subCatId) {
                     echo $tab["title"];
                 }
             }
@@ -55,14 +58,14 @@ $bdd->disconnectBDD();
                             </button>
                         </div>
                         <textarea name="content" id="" placeholder="Tapez des détails ici..."></textarea>
-                        <button type="submit" name="AddPost" value="<?php echo $num ?>">Poster</button>
+                        <button type="submit" name="AddPost" value="<?php echo $subCatId ?>">Poster</button>
                     </form>
                 </dialog>
                 </section>
                 <section>
                 <?php
                 foreach ($posts as $tab) {
-                     if ($tab["FK_category_id"] === $num) {
+                     if ($tab["FK_category_id"] === $subCatId) {
                          ?>
                          <div class="flex list pad-10">
                             <p><a href="posts.php?id=<?php echo $tab["id"] ?>"><?php echo $tab["title"]; ?></a></p>

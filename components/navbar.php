@@ -1,11 +1,11 @@
-<div id="nav" class="flex">
+<div class="flex dark_section">
     <div class="flex container between pad-10">
         <div class="flex">
             
                 <ul class="flex gap-10">
                     <li><a href="index.php">Accueil</a></li>
                     <?php if (isset($_SESSION["user"])) {
-                        echo '<li><a href="logout.php">Déconnexion</a></li>';
+                        echo '<li><a href="actions\logout.php">Déconnexion</a></li>';
                         if ($_SESSION["user"]["status"] == "admin") {
                             echo '<li><a href="admin.php">Dashboard</a></li>';
                         } elseif ($_SESSION["user"]["status"] == "modo") {
@@ -30,7 +30,7 @@
         <div>
             <?php if (isset($_SESSION["user"])) {
                 echo '
-            <p>Salut, <a href="profil.php">' . $_SESSION["user"]["Pseudo"] . '</a></p>';
+            <p>Salut, <a href="profil.php?pseudo='. $_SESSION["user"]["Pseudo"] .'">' . $_SESSION["user"]["Pseudo"] . '</a></p>';
             } ?>
         </div>
     </div>

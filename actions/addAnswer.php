@@ -1,27 +1,25 @@
 <?php
 session_start();
-require_once "../config/config.php";
-require_once "../classes/answer.php";
+require_once "../config/BddManager.php";
+require_once "../classes/Answer.php";
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
 if (isset($_POST["addAnswer"])) {
-    $content = $_POST["AnsContent"];
+        $content = $_POST["AnsContent"];
         $author = $_SESSION["user"]["id"];
         $post = $_POST["addAnswer"];
-        var_dump($_POST);
 
     if (!empty($content)) {
-
-        $newAns = new answer;
+        $newAns = new Answer;
         $newAns->setContent($content);
         $newAns->setAuthor($author);
         $newAns->setPost($post);
-        $bdd->addAns($newAns);
+        Answer::addAns($bdd, $newAns);
         header("Location: ../posts.php?id=$post");
     }
 }
 
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();

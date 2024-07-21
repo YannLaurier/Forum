@@ -1,10 +1,10 @@
 <?php
 session_start();
+require_once "config\BddManager.php";
+require_once "classes\User.php";
 
-require_once "classes/user.php";
-
-$bdd = new bdd();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 $message="";
 
 if(isset($_POST["SignUp"])){
@@ -16,28 +16,28 @@ if(isset($_POST["SignUp"])){
 
     if (!empty($pass) && !empty($pass2) && !empty($email) && !empty($email2)) {
         if ($pass === $pass2 && $email === $email2) {
-            $pseudoCheck = $bdd->comparePseudo($pseudo);
-            $emailCheck = $bdd->compareEmail($email);
+            $pseudoCheck = User::comparePseudo($bdd, $pseudo);
+            $emailCheck = User::compareEmail($bdd, $email);
             
             if($pseudoCheck === true){
-                $message = "Pseudo déjà en usage, sois plus original (ou moins concis)";
+                $message = "Pseudo déjà en usage, sois plus original (ou moins concis).";
             }elseif($emailCheck === true){
-                $message = "C'est le mail de quelqu'un d'autre ça, inscris-toi avec le tien";
+                $message = "C'est le mail de quelqu'un d'autre ça, inscris-toi avec le tien.";
             }else{
-            $newUser = new user;
+            $newUser = new User;
             $newUser->setPseudo($pseudo);
             $newUser->setEmail($email);
             $newUser->setPass(password_hash($pass, PASSWORD_BCRYPT));
-            $bdd->addUser($newUser);
+            User::addUser($bdd, $newUser);
             header('Location: index.php');
             }
-    }else{$message = "entre deux fois le même email et deux fois le même mdp frangin";}
+    }else{$message = "Assure-toi d'entrer deux fois le même mot de passe et deux fois le même email.";}
 }else{
-    $message ="Tous les champs ne sont pas remplis";
+    $message ="Oups! Quelque chose était vide...";
 }
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 
 ?>
 

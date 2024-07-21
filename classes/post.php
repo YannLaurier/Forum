@@ -1,6 +1,6 @@
 <?php
 
-class post extends bdd
+class post
 {
     private $title;
     private $content;
@@ -43,5 +43,45 @@ class post extends bdd
     public function getSubCat()
     {
         return $this->subcat;
+    }
+
+    public static function bringPosts(PDO $bdd)
+    {
+        try {
+            $sql = 'SELECT * FROM posts';
+            $allPosts = $bdd->query($sql);
+            return $allPosts->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function addPost(PDO $bdd, post $post)
+    {
+        try {
+            $bdd->beginTransaction();
+            $author = $post->getAuthor();
+            $subcat = $post->getSubCat();
+            $title = $post->getTitle();
+            $content = $post->getContent();
+
+            $sql = $bdd->prepare('INSERT INTO posts(FK_author_id, FK_category_id, title, content) VALUES (:author, :subcat, :title, :content)');
+            $sql->bindParam(':author', $author);
+            $sql->bindParam(':subcat', $subcat);
+            $sql->bindParam(':title', $title);
+            $sql->bindParam(':content', $content);
+            $sql->execute();
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
     }
 }

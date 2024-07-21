@@ -1,7 +1,5 @@
 <?php
-
-class answer extends bdd
-{
+class Answer {
     private $content;
     private $author;
     private $post;
@@ -34,5 +32,58 @@ class answer extends bdd
     public function getPost()
     {
         return $this->post;
+    }
+
+    public static function countAns(PDO $bdd)
+    {
+        try {
+            $sql = 'SELECT FK_post_id, COUNT(*) FROM `answers` GROUP BY Fk_post_id';
+            $postIdAns = $bdd->query($sql);
+            return $postIdAns->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function bringAns(PDO $bdd, $postId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT Pseudo, Profile_pic, user.id, content, time, FK_post_id FROM user INNER JOIN answers ON user.id = answers.FK_author_id WHERE answers.FK_post_id = :postId ORDER BY time DESC');
+            $sql->bindParam(':postId', $postId);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function addAns(PDO $bdd, Answer $ans)
+    {
+        try {
+            $bdd->beginTransaction();
+            $content = $ans->getContent();
+            $author = $ans->getAuthor();
+            $post = $ans->getPost();
+
+            $sql = $bdd->prepare('INSERT INTO answers(content, FK_author_id, FK_post_id) VALUES (:content, :author, :post)');
+            $sql->bindParam(':content', $content);
+            $sql->bindParam(':author', $author);
+            $sql->bindParam(':post', $post);
+            $sql->execute();
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
     }
 }

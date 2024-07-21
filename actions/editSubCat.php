@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "../config/config.php" ;
-$bdd=new bdd();
+require_once "../config/BddManager.php" ;
+$bdd=new BddManager();
 $bdd->connectBDD();
 
 // if (isset($_POST["EditSubCat"])) {

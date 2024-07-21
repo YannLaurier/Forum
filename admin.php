@@ -1,16 +1,19 @@
 <?php
 session_start();
-require_once "classes/user.php";
-$bdd = new bdd();
-$bdd->connectBDD();
+require_once "config\BddManager.php";
+require_once "classes\User.php";
+require_once "classes\Cat.php";
+require_once "classes\Subcat.php";
+require_once "classes\Post.php"; //raison : afficher nombre posts à côté de chaque subcat
 
-$cats = $bdd->bringCats();
-$subcats = $bdd->bringSubCats();
-$allMods = $bdd->bringMods();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
+$cats = Cat::bringCats($bdd);
+$subcats = Subcat::bringSubCats($bdd);
+$allMods = User::bringMods($bdd);
 
-
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +111,7 @@ $bdd->disconnectBDD();
                         echo '<form action="actions/deleteCat.php" class="flex between list pad-10 dark" method = "POST">
                         <h3><a href="cat.php?id='.$tab["id"].'">' . $tab["title"] . '</a></h3>
                         <div class="flex gap-10">
-                            <button type="button" name="EditCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
+                            <button type="button" name="EditCat" value="' . $tab["id"] . '" class="tinyGuy">Modifier</button>
                             <button type="submit" name="DeleteCat" value="' . $tab["title"] . '" class="tinyGuy">Supprimer</button>
                         </div>
                     </form>';
@@ -118,7 +121,7 @@ $bdd->disconnectBDD();
                                 <p><a href="subcat.php?id='.$tab2["id"].'">' . $tab2["title"] . '</a></p>
                                 <div class="flex gap-10">
                                     <button type="button" name="EditSubCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
-                                    <button type="submit" name="DeleteSubCat" value="' . $tab2["title"] . '" class="tinyGuy">Supprimer</button>
+                                    <button type="submit" name="DeleteSubCat" value="' . $tab2["id"] . '" class="tinyGuy">Supprimer</button>
                                 </div>
                             </form>';
                             }

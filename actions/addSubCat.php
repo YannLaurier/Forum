@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once "../config/config.php" ;
+require_once "../config/BddManager.php" ;
 
-$bdd=new bdd();
-$bdd->connectBDD();
-$cats = $bdd->bringCats();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
+$cats = Cat::bringCats($bdd);
 
 if (isset($_POST["AddSubCat"])) {
     $subCatTitle = $_POST["NewSubCat"];
@@ -17,8 +17,8 @@ if (isset($_POST["AddSubCat"])) {
     }
     unset($tab);
 
-    $bdd->addSubCat(["NewSubCat" => $subCatTitle, "MotherCat" => $MotherId]);
+    Subcat::addSubCat($bdd, ["NewSubCat" => $subCatTitle, "MotherCat" => $MotherId]);
     header('Location:../admin.php');
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();

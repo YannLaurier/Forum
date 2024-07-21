@@ -1,19 +1,20 @@
 <?php
 session_start();
-require_once "../config/config.php";
-require_once "../classes/post.php";
+require_once "../config/BddManager.php";
+require_once "../classes/Post.php";
+require_once "../classes/Subcat.php";
 
-$bdd = new bdd();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
 if (isset($_POST["AddPost"])) {
-    $subcats = $bdd->bringSubCats();
+    $subcats = Subcat::bringSubCats($bdd);
     foreach ($subcats as $tab) {
         if ($tab["id"] == $_POST["AddPost"]) {
-            $num = $tab["id"];
+            $id = $tab["id"];
         }
     }
-    settype($num, "integer");
+    settype($id, "integer");
 
     $title = htmlspecialchars($_POST["title"]);
     $content = htmlspecialchars($_POST["content"]);
@@ -21,14 +22,14 @@ if (isset($_POST["AddPost"])) {
 
     if (!empty($title) && !empty($content)) {
 
-        $newPost = new post;
+        $newPost = new Post;
         $newPost->setTitle($title);
         $newPost->setContent($content);
         $newPost->setAuthor($author);
-        $newPost->setSubCat($num);
-        $bdd->addPost($newPost);
-        header("Location: ../subcat.php?id=$num");
+        $newPost->setSubCat($id);
+        Post::addPost($bdd, $newPost);
+        header("Location: ../subcat.php?id=$id");
     }
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
