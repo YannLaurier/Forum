@@ -51,7 +51,11 @@ class Answer {
     public static function bringAns(PDO $bdd, $postId)
     {
         try {
-            $sql = $bdd->prepare('SELECT Pseudo, Profile_pic, user.id, content, time, FK_post_id FROM user INNER JOIN answers ON user.id = answers.FK_author_id WHERE answers.FK_post_id = :postId ORDER BY time DESC');
+            $sql = $bdd->prepare('SELECT Pseudo, profilePicType, profilePicData, user.id, content, time, FK_post_id
+                                FROM user
+                                LEFT JOIN answers ON user.id = answers.FK_author_id
+                                WHERE answers.FK_post_id = :postId
+                                ORDER BY time ASC');
             $sql->bindParam(':postId', $postId);
             $sql->execute();
 
@@ -86,4 +90,26 @@ class Answer {
             fclose($error);
         }
     }
+
+    public static function bringThatGuysAns(PDO $bdd, $userId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT *
+                                  FROM answers
+                                  WHERE FK_author_id = :id
+                                  ORDER BY time ASC
+                                  LIMIT 5');
+            $sql->bindParam(':id', $userId);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+
 }

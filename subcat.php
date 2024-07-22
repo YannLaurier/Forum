@@ -32,7 +32,7 @@ $bddManager->disconnectBDD();
         }
     }
     ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="flex column between">

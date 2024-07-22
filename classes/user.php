@@ -190,4 +190,46 @@ class User
             fclose($error);
         }
     }
+
+    public static function bringOneUser(PDO $bdd, $pseudo)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT *
+                                  FROM user
+                                  WHERE pseudo = :pseudo;');
+            $sql->bindParam(':pseudo', $pseudo);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function updateUser(PDO $bdd, $pseudo, $description, $email, $id)
+    {
+        try {
+            $bdd->beginTransaction();
+
+            $sql = $bdd->prepare("UPDATE user
+            SET Pseudo = :pseudo,  description = :description,  email = :email
+            WHERE id = :id");
+            $sql->bindParam(':description', $description);
+            $sql->bindParam(':pseudo', $pseudo);
+            $sql->bindParam(':email', $email);
+            $sql->bindParam(':id', $id);
+            $sql->execute();
+
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
 }

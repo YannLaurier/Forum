@@ -6,11 +6,8 @@
                     <li><a href="index.php">Accueil</a></li>
                     <?php if (isset($_SESSION["user"])) {
                         echo '<li><a href="actions\logout.php">Déconnexion</a></li>';
-                        if ($_SESSION["user"]["status"] == "admin") {
-                            echo '<li><a href="admin.php">Dashboard</a></li>';
-                        } elseif ($_SESSION["user"]["status"] == "modo") {
-                            echo '<li><a href="modo.php">Dashboard</a></li>';
-                        }
+                        if ($_SESSION["user"]["status"] == "admin" || $_SESSION["user"]["status"] == "modo") {
+                            echo '<li><a href="admin.php">Dashboard</a></li>';}
                     } else {
                         echo '<li><a href="connexion.php">Connexion</a></li>
                       <li><a href="inscription.php">Inscription</a></li>';
@@ -31,7 +28,7 @@
             <?php if (isset($_SESSION["user"])) {
                 echo '
             <p>Salut, <a href="profil.php?pseudo='. $_SESSION["user"]["Pseudo"] .'">' . $_SESSION["user"]["Pseudo"] . '</a></p>';
-            } ?>
+            }?>
         </div>
     </div>
     <script src="js\navbar.js"></script>

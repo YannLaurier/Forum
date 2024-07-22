@@ -32,7 +32,7 @@ $bddManager->disconnectBDD();
         }
     }
     ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="flex column between">
@@ -42,6 +42,7 @@ $bddManager->disconnectBDD();
             <h1><?php
             foreach ($posts as $tab) {
                 if ($tab["id"] === $postId) {
+                    echo $
                     echo $tab["title"];
 
                     ?></h1>
@@ -56,9 +57,18 @@ $bddManager->disconnectBDD();
                 foreach ($ans as $tab) { ?>
                 <div class="answers flex list pad-10">
                 <div class="flex column profile">
-                <?php echo '<img src="uploads/' . $tab["Profile_pic"] . '" alt="profile pic of ' . $tab["Pseudo"] . '">';
+                    <img src=
+                    <?php
+                if (!empty($tab["profilePicData"])) {
+                    echo "actions\displayProfilePic.php?id=".$tab["Pseudo"];
+                } else {
+                    echo "assets/default.jpg";
+                }
+                ?>
+                alt="profile picture of <?php $tab["Pseudo"] ?>">
+                <?php
             echo '<h3 class= ansPseudo pad-10"><a href="profil.php?pseudo='.$tab["Pseudo"].'">' . $tab["Pseudo"] . '</a></h3>'
-                                    ?>
+            ?>
             </div>
             <?php
             echo '<p class="ansContent">' . $tab["content"] . '</p>';

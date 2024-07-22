@@ -282,7 +282,34 @@ note : that's for the js onclick navbar thing
     width: 150px;
 }
 
-.tinyGuy {
+#editPp{
+    position: relative;
+    border-radius: 500px;
+    height: 30px;
+    width: 30px;
+    top: 120px;
+    left: -65px;
+    padding: 5px 0px 5px 0px;
+    background: var(--text-color);
+    border: none;
+}
+
+#editPp:hover {
+    background: var(--dark);
+    box-shadow: 0px 0px 2px 0px var(--dark);
+    border: none;
+    transition-duration: 0.5s;
+}
+
+#editPp:focus {
+    box-shadow: none;
+}
+
+#newPp {
+    width: 80%;
+}
+
+input::file-selector-button, .tinyGuy {
     margin: 0;
     font-size: 13px;
     padding: 5px 10px;
@@ -291,6 +318,17 @@ note : that's for the js onclick navbar thing
     width: fit-content;
     border-radius: 5px;
 }
+
+input::file-selector-button{
+    height: 100%;
+    font-size: 17px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin : 0px 10px 0px -2px;
+    border-radius: 0px;
+    border : none;
+    border-right: 1px solid var(--text-color);
+}
+
 
 .dark .tinyGuy {
     background-color: var(--text-color);

@@ -84,4 +84,24 @@ class post
             fclose($error);
         }
     }
+
+    public static function bringThatGuysPosts(PDO $bdd, $userId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT *
+                                  FROM posts
+                                  WHERE FK_author_id = :id
+                                  ORDER BY publication_date ASC
+                                  LIMIT 5');
+            $sql->bindParam(':id', $userId);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
 }
