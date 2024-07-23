@@ -56,7 +56,7 @@ class Answer {
     public static function bringAns(PDO $bdd, $postId)
     {
         try {
-            $sql = $bdd->prepare('SELECT Pseudo, profilePicType, profilePicData, user.id, content, time, FK_post_id
+            $sql = $bdd->prepare('SELECT Pseudo, profilePicType, profilePicData, user.id AS userId, answers.id AS answerId, content, time, FK_post_id
                                 FROM user
                                 LEFT JOIN answers ON user.id = answers.FK_author_id
                                 WHERE answers.FK_post_id = :postId
@@ -116,5 +116,46 @@ class Answer {
         }
     }
 
+    public static function editAnswer(PDO $bdd, $content, $id)
+    {
+        try {
+            $bdd->beginTransaction();
+
+            $sql = $bdd->prepare("UPDATE answers
+            SET  content = :content
+            WHERE id = :id");
+            $sql->bindParam(':content', $content);
+            $sql->bindParam(':id', $id);
+            $sql->execute();
+
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function deleteAnswer(PDO $bdd, $ansId)
+    {
+        try {
+            $bdd->beginTransaction();
+
+            $sql = $bdd->prepare("DELETE FROM answers
+            WHERE id = :ansId");
+            $sql->bindParam(':ansId', $ansId);
+            $sql->execute();
+
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
 
 }

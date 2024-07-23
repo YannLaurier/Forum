@@ -49,7 +49,8 @@ $bddManager->disconnectBDD();
                                 <dialog id="popover" class="pad-10" popover>
                                     <form action="actions/editPost.php" method="POST">
                                         <div class="flex">
-                                            <input type="text" name="title" placeholder="Titre du sujet" value="<?php echo $post[0]["postTitle"]; ?>">
+                                            <input type="text" name="title" placeholder="Titre du sujet"
+                                                value="<?php echo $post[0]["postTitle"]; ?>">
                                             <button type="button" class="close">
                                                 <svg fill="var(--dark)" xmlns="http://www.w3.org/2000/svg" width="17.828"
                                                     height="17.828">
@@ -75,13 +76,13 @@ $bddManager->disconnectBDD();
                 }
                 ?>
                 <p class="thisEmptyMessage">Publié le <?php
-                
+
                 $date = strtotime($post[0]["publication_date"]);
                 setlocale(LC_TIME, 'fr_FR');
                 date_default_timezone_set('Europe/Paris');
-                echo date( "d F Y", $date)." à ".date("h:i", $date);
+                echo date("d F Y", $date) . " à " . date("h:i", $date);
                 ?>
-                dans la sous-catégorie <a
+                    dans la sous-catégorie <a
                         href="subcat.php?id=<?php echo $post[0]["subCatId"] ?>"><?php echo $post[0]["subCatTitle"]; ?></a>
                 </p>
                 <div class="flex between">
@@ -102,7 +103,7 @@ $bddManager->disconnectBDD();
             </section>
             <section>
                 <?php if (!empty($ans)) {
-                    foreach ($ans as $tab) {
+                    foreach ($ans as $key => $tab) {
                         ?>
                         <div class="answers flex list pad-10" name="answer">
                             <div class="flex column profile">
@@ -113,25 +114,39 @@ $bddManager->disconnectBDD();
                                     echo "assets/default.jpg";
                                 }
                                 ?>
-                                alt="profile picture of <?php $tab["Pseudo"] ?>">
-                                <h3 class= ansPseudo pad-10"><a href="profil.php?pseudo=<?php
-                                echo$tab["Pseudo"]?>"><?php echo $tab["Pseudo"]; ?></a></h3>
+                                    alt="profile picture of <?php $tab["Pseudo"] ?>">
+                                <h3 class=ansPseudo pad-10"><a href="profil.php?pseudo=<?php
+                                echo $tab["Pseudo"] ?>"><?php echo $tab["Pseudo"]; ?></a></h3>
                                 <p class="thisEmptyMessage">Le <?php
                                 $dateAns = strtotime($tab["time"]);
-                                echo date( "d F Y", $dateAns)." à ".date("h:i", $dateAns); ?></p>
+                                echo date("d F Y", $dateAns) . " à " . date("h:i", $dateAns); ?></p>
                             </div>
-                            <p class="ansContent pad-10"><?php echo$tab["content"] ?></p>
-                            <?php
-                            $baby = array_key_last($ans);
-                            $thisKey = //
-                            var_dump($thisKey);
-
-                            //  if($ans[THIS] === $baby){
-                            //      echo "mon cul";
-                            //  }else{
-                            //     echo "NON";
-                            //  }
-                            ?>
+                            <div class="flex between ansBody">
+                                <p class="ansContent pad-10"><?php echo $tab["content"] ?></p>
+                                <?php
+                                $baby = array_key_last($ans);
+                                if ($key === $baby && $tab["userId"] === $_SESSION["user"]["id"]) {
+                                    ?>
+                                    <div class="flex gap-10 ansForm">
+                                        <button type="button" popovertarget="ModifAns<?php echo $tab["answerId"] ?>"
+                                            class="tinyGuy">Modifier</button>
+                                        <form action="actions/deleteAnswer.php" method="POST">
+                                            <input type="hidden" name="postId" value="<?php echo $_GET["id"] ?>">
+                                            <button type="submit" name="DeleteAns" value="<?php echo $tab["answerId"] ?>" class="tinyGuy">Supprimer</button>
+                                        </form>
+                                        <dialog id="ModifAns<?php echo $tab["answerId"] ?>" popover aria-modal="true">
+                                            <form action="actions/editAnswer.php" method="POST" class="flex column">
+                                                <input type="hidden" name="postId" value="<?php echo $_GET["id"] ?>">
+                                                <textarea class="pad-10" name="newContent"><?php echo $tab["content"]; ?></textarea>
+                                                <button class="pad-10" type="submit" name="editAns" class="tinyGuy"
+                                                    value="<?php echo $tab["answerId"]; ?>">Modifier</button>
+                                            </form>
+                                        </dialog>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+                            </div>
                         </div> <?php
                     }
                 } else {

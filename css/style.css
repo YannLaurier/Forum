@@ -132,6 +132,8 @@ dialog input {
 dialog textarea {
     height: fit-content;
     min-height: 200px;
+    max-width: 96%;
+    margin: auto;
 }
 
 :backdrop {
@@ -352,6 +354,13 @@ select {
     right: 10px;
 }
 
+.ansBody {
+    width : 100%;
+}
+
+.ansForm {
+    height : 25px;
+}
 
 /*dashboard*/
 .miniModal {
