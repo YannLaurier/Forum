@@ -1,21 +1,19 @@
 <?php
 session_start();
 require_once "../config/BddManager.php";
-$bdd = new BddManager();
-$bdd->connectBDD();
+require_once '../classes/Subcat.php';
 
-$subcats = $bdd->bringSubCats();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
+
+$subcats = Subcat::bringSubCats($bdd);
 
 if (isset($_POST["DeleteSubCat"])) {
-    $DyingSubCat = $_POST["DeleteSubCat"];
-    foreach ($subcats as $tab) {
-        if ($DyingSubCat === $tab["title"]) {
-            $DyingSubId = $tab["id"];
-        }
-        unset($tab);
-    }
-    $bdd->deleteSubCat($DyingSubId);
-    header('Location:../admin.php');
+
+    $DyingSubId = $_POST["DeleteSubCat"];
+    
+    Subcat::deleteSubCat($bdd, $DyingSubId);
 }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();
+header('Location:../dashboard.php');

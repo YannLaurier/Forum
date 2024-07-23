@@ -85,7 +85,7 @@ class post
         }
     }
 
-    public static function bringThatGuysPosts(PDO $bdd, $userId)
+    public static function bringThatGuysPosts(PDO $bdd, int $userId)
     {
         try {
             $sql = $bdd->prepare('SELECT *
@@ -98,6 +98,68 @@ class post
 
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function bringOnePost(PDO $bdd, int $postId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT user.id AS userId, user.Pseudo, user.`status`, user.profilePicType, user.profilePicData, posts.id AS postId, posts.FK_author_id, posts.FK_category_id, posts.title AS postTitle, posts.content, posts.publication_date, subcat.id AS subCatId, subcat.title AS subCatTitle, subcat.FK_mother_cat AS catId
+                                  FROM posts
+                                  LEFT JOIN user ON posts.FK_author_id = user.id
+                                  LEFT JOIN subcat ON subcat.id = posts.FK_category_id
+                                  WHERE posts.id = :postId;');
+            $sql->bindParam(':postId', $postId);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function deletePost($bdd, $postId)
+    {
+        try {
+            $bdd->beginTransaction();
+
+            $sql = $bdd->prepare('DELETE FROM posts
+                                  WHERE id = :postId');
+            $sql->bindParam(':postId', $postId);
+            $sql->execute();
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function editPost(PDO $bdd, $title, $content, $id)
+    {
+        try {
+            $bdd->beginTransaction();
+
+            $sql = $bdd->prepare("UPDATE posts
+            SET title = :title,  content = :content
+            WHERE id = :id");
+            $sql->bindParam(':title', $title);
+            $sql->bindParam(':content', $content);
+            $sql->bindParam(':id', $id);
+            $sql->execute();
+
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
             fwrite($error, $txt);

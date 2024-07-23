@@ -34,12 +34,17 @@ class Answer {
         return $this->post;
     }
 
-    public static function countAns(PDO $bdd)
+    public static function countAns(PDO $bdd, $id)
     {
         try {
-            $sql = 'SELECT FK_post_id, COUNT(*) FROM `answers` GROUP BY Fk_post_id';
-            $postIdAns = $bdd->query($sql);
-            return $postIdAns->fetchAll(PDO::FETCH_ASSOC);
+            $sql =  $bdd->prepare('SELECT FK_post_id, COUNT(*)
+                    FROM `answers`
+                    WHERE FK_post_id = :id
+                    GROUP BY Fk_post_id');
+            $sql->bindParam(':id', $id);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
@@ -91,7 +96,7 @@ class Answer {
         }
     }
 
-    public static function bringThatGuysAns(PDO $bdd, $userId)
+    public static function bringThatGuysAns(PDO $bdd, int $userId)
     {
         try {
             $sql = $bdd->prepare('SELECT *

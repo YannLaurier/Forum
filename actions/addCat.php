@@ -1,16 +1,16 @@
 <?php
 session_start();
 require_once "../config/BddManager.php" ;
-require_once "../config/BddManager.php";
+require_once "../classes/Cat.php";
 
-$bdd=new BddManager();
-$bdd->connectBDD();
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
 
 if (isset($_POST["AddCat"])) {
     $catname = $_POST["NewCat"];
-    Cat::addCat($catname);
-    header('Location:../admin.php');
+    Cat::addCat($bdd, $catname);
+    header('Location:../dashboard.php');
     }
 
-$bdd->disconnectBDD();
+$bddManager->disconnectBDD();

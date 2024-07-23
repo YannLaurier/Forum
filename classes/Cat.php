@@ -1,6 +1,7 @@
 <?php
 
-class Cat {
+class Cat
+{
     private $title;
     public function setTitle($title)
     {
@@ -62,20 +63,22 @@ class Cat {
         }
     }
 
-    // public function updateCat($param){
-    //     try{
-    //         $this->bdd->beginTransaction();
-    //         $growingCat = $param;
-
-    //         $sql = $this->bdd->prepare('UPDATE cat SET title = :growingCat')
-
-    //     } catch (\Throwable $th) {
-    //         $this->bdd->rollBack();
-    //         $error = fopen("error.txt", "w");
-    //         $txt = $th->getMessage();
-    //         fwrite($error, $txt);
-    //         fclose($error);
-    //     }
-    // }
+    public static function editCat($bdd, $catName, $catId)
+    {
+        try {
+            $bdd->beginTransaction();
+            $sql = $bdd->prepare('UPDATE cat SET title = :growingCat WHERE id=:id');
+            $sql->bindParam(':growingCat', $catName);
+            $sql->bindParam(':id', $catId);
+            $sql->execute();
+            $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
 
 }

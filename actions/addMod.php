@@ -11,7 +11,7 @@ if(isset($_POST["AddMod"])){
 
     unset($tab);
     User::addMod($bdd, $newModName);
-    header('Location:../admin.php');
+    header('Location:../dashboard.php');
 }
 
 $bddManager->disconnectBDD();

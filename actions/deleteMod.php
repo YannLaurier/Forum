@@ -10,7 +10,7 @@ if(isset($_POST["DeleteMod"])){
     $modName = $_POST["modName"];
 
     User::deleteMod($bdd, $modName);
-    header('Location:../admin.php');
+    header('Location:../dashboard.php');
 }
 
 $bddManager->disconnectBDD();

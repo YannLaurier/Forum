@@ -8,12 +8,11 @@ require_once "classes\Answer.php";
 $bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
-$posts = Post::bringPosts($bdd);
-
 $postId = $_GET["id"];
 settype($postId, "integer");
 
 $ans = Answer::bringAns($bdd, $postId);
+$post = Post::bringOnePost($bdd, $postId);
 
 $message = "";
 
@@ -26,11 +25,7 @@ $bddManager->disconnectBDD();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
-    foreach ($posts as $tab) {
-        if ($tab["id"] === $postId) {
-            echo $tab["title"];
-        }
-    }
+    echo $post[0]["postTitle"];
     ?></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -39,42 +34,107 @@ $bddManager->disconnectBDD();
     <?php include "components/navbar.php" ?>
     <main>
         <div class="container">
-            <h1><?php
-            foreach ($posts as $tab) {
-                if ($tab["id"] === $postId) {
-                    echo $
-                    echo $tab["title"];
-
-                    ?></h1>
-                    <section><?php
-                    echo $tab["content"];
-                }
-            }
-            ?>
-            </section>
-            <section >
-                <?php if (!empty($ans)) {
-                foreach ($ans as $tab) { ?>
-                <div class="answers flex list pad-10">
-                <div class="flex column profile">
-                    <img src=
-                    <?php
-                if (!empty($tab["profilePicData"])) {
-                    echo "actions\displayProfilePic.php?id=".$tab["Pseudo"];
-                } else {
-                    echo "assets/default.jpg";
+            <section>
+                <h1 class="pad-10">
+                    <?php echo $post[0]["postTitle"]; ?>
+                </h1>
+                <?php
+                if (isset($_SESSION["user"])) {
+                    if ($_SESSION["user"]["status"] === "admin" || $_SESSION["user"]["status"] === "modo" || $_SESSION["user"]["id"] === $post[0]["FK_author_id"]) {
+                        ?>
+                        <div class="deletePost flex gap-10">
+                            <?php if ($_SESSION["user"]["id"] === $post[0]["FK_author_id"]) { ?>
+                                <button class="tinyGuy open" type="button" popovertarget="editPost"
+                                    value="<?php echo $post[0]["postId"]; ?>">Modifier</button>
+                                <dialog id="popover" class="pad-10" popover>
+                                    <form action="actions/editPost.php" method="POST">
+                                        <div class="flex">
+                                            <input type="text" name="title" placeholder="Titre du sujet" value="<?php echo $post[0]["postTitle"]; ?>">
+                                            <button type="button" class="close">
+                                                <svg fill="var(--dark)" xmlns="http://www.w3.org/2000/svg" width="17.828"
+                                                    height="17.828">
+                                                    <path
+                                                        d="m2.828 17.828 6.086-6.086L15 17.828 17.828 15l-6.086-6.086 6.086-6.086L15 0 8.914 6.086 2.828 0 0 2.828l6.085 6.086L0 15l2.828 2.828z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <textarea name="content"><?php echo $post[0]["content"]; ?></textarea>
+                                        <button type="submit" name="editPost"
+                                            value="<?php echo $post[0]["postId"]; ?>">Modifier</button>
+                                    </form>
+                                </dialog>
+                            <?php } ?>
+                            <form action="actions/deletePost.php" method="POST">
+                                <input type="hidden" name="subCat" value="<?php echo $post[0]["FK_category_id"]; ?>">
+                                <button class="tinyGuy" type="submit" name="deletePost"
+                                    value="<?php echo $post[0]["postId"]; ?>">Supprimer</button>
+                            </form>
+                        </div>
+                        <?php
+                    }
                 }
                 ?>
-                alt="profile picture of <?php $tab["Pseudo"] ?>">
-                <?php
-            echo '<h3 class= ansPseudo pad-10"><a href="profil.php?pseudo='.$tab["Pseudo"].'">' . $tab["Pseudo"] . '</a></h3>'
-            ?>
-            </div>
-            <?php
-            echo '<p class="ansContent">' . $tab["content"] . '</p>';
-            ?> </div> <?php
-                }
-                }else{
+                <p class="thisEmptyMessage">Publié le <?php
+                
+                $date = strtotime($post[0]["publication_date"]);
+                setlocale(LC_TIME, 'fr_FR');
+                date_default_timezone_set('Europe/Paris');
+                echo date( "d F Y", $date)." à ".date("h:i", $date);
+                ?>
+                dans la sous-catégorie <a
+                        href="subcat.php?id=<?php echo $post[0]["subCatId"] ?>"><?php echo $post[0]["subCatTitle"]; ?></a>
+                </p>
+                <div class="flex between">
+                    <div class="flex column">
+                        <img class="pad-10" src="<?php
+                        if (!empty($post[0]["profilePicData"])) {
+                            echo "actions\displayProfilePic.php?id=" . $post[0]["Pseudo"];
+                        } else {
+                            echo "assets/default.jpg";
+                        }
+                        ?>" alt="profile pic of <?php echo $post[0]["Pseudo"] ?>">
+                        <h2 class="pad-10 ansPseudo"><?php echo $post[0]["Pseudo"]; ?></h2>
+                    </div>
+                    <p class="pad-10" style="width: 80%;">
+                        <?php echo $post[0]["content"]; ?>
+                    </p>
+                </div>
+            </section>
+            <section>
+                <?php if (!empty($ans)) {
+                    foreach ($ans as $tab) {
+                        ?>
+                        <div class="answers flex list pad-10" name="answer">
+                            <div class="flex column profile">
+                                <img src=<?php
+                                if (!empty($tab["profilePicData"])) {
+                                    echo "actions\displayProfilePic.php?id=" . $tab["Pseudo"];
+                                } else {
+                                    echo "assets/default.jpg";
+                                }
+                                ?>
+                                alt="profile picture of <?php $tab["Pseudo"] ?>">
+                                <h3 class= ansPseudo pad-10"><a href="profil.php?pseudo=<?php
+                                echo$tab["Pseudo"]?>"><?php echo $tab["Pseudo"]; ?></a></h3>
+                                <p class="thisEmptyMessage">Le <?php
+                                $dateAns = strtotime($tab["time"]);
+                                echo date( "d F Y", $dateAns)." à ".date("h:i", $dateAns); ?></p>
+                            </div>
+                            <p class="ansContent pad-10"><?php echo$tab["content"] ?></p>
+                            <?php
+                            $baby = array_key_last($ans);
+                            $thisKey = //
+                            var_dump($thisKey);
+
+                            //  if($ans[THIS] === $baby){
+                            //      echo "mon cul";
+                            //  }else{
+                            //     echo "NON";
+                            //  }
+                            ?>
+                        </div> <?php
+                    }
+                } else {
                     echo "<p class = 'thisEmptyMessage'>Personne n'a encore répondu à ce post. Veux-tu changer cela ?</p>";
                 }
                 ?>
@@ -82,12 +142,15 @@ $bddManager->disconnectBDD();
             <section>
                 <form method="POST" action="actions/addAnswer.php" class="flex pad-10 gap-10">
                     <textarea type="text" name="AnsContent" placeholder="Tapez votre réponse ici..."></textarea>
-                    <button class="tinyGuy" type="submit" name="addAnswer" value="<?php echo $postId; ?>">Répondre</button>
+                    <button class="tinyGuy" type="submit" name="addAnswer"
+                        value="<?php echo $postId; ?>">Répondre</button>
                 </form>
             </section>
         </div>
     </main>
     <?php include "components/footer.php"; ?>
 </body>
+
+<script type="text/javascript" src="js\popover.js"></script>
 
 </html>

@@ -1,19 +1,21 @@
 <?php
 session_start();
-require_once "../config/BddManager.php" ;
-$bdd=new BddManager();
-$bdd->connectBDD();
+require_once "../config/BddManager.php";
+require_once "../classes/Subcat.php";
 
-// if (isset($_POST["EditSubCat"])) {
-    // $growingCat = $_POST["EditSubCat"];
-    // foreach ($subcats as $tab) {
-    // if($growingSubCat === $tab["title"]){
-    // $growingSubId = $tab["id"];
-    // }
-    // }
-    // unset($tab);
-    // $bdd->updateSubCat($growingSubId);
-    // header('Location:../admin.php');
-    // }
+$bddManager = new BddManager();
+$bdd = $bddManager->connectBDD();
 
-$bdd->disconnectBDD();
+if (isset($_POST["EditSubCat"])) {
+
+    $title = $_POST["newSubTitle"];
+    $MotherCat = $_POST["MotherCat"];
+    $id = $_POST["EditSubCat"];
+    settype($MotherCat, "integer");
+    settype($id, "integer");
+
+    Subcat::editSubCat($bdd, $title, $id, $MotherCat);
+}
+
+$bddManager->disconnectBDD();
+header("Location:../dashboard.php");

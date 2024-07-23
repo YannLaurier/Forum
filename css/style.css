@@ -30,7 +30,7 @@ html {
     display: flex;
 }
 
-.column {
+.column, #nav {
     flex-direction: column;
 }
 
@@ -44,7 +44,7 @@ html {
 
 .container {
     width: 900px;
-    max-width: 100vw;
+    max-width: 90vw;
     margin: 0px auto;
 }
 
@@ -92,7 +92,7 @@ main {
 
 /*titles*/
 
-h1 {
+h1, #nav {
     font-size: 30px;
     text-align: center;
 }
@@ -122,7 +122,7 @@ dialog {
     max-height: 75%;
     border: 1px solid var(--text-color);
     background: var(--background-color);
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 dialog input {
@@ -200,7 +200,6 @@ button:focus {
 }
 
 /*messages to user*/
-
 .message {
     color: var(--red);
     font-style: italic;
@@ -224,7 +223,7 @@ button:focus {
 
 .dark_section ul,
 .dark_section p {
-    padding-top: 5px;
+    padding-top: 15px;
 }
 
 footer :not(h3) {
@@ -240,42 +239,23 @@ footer h3 {
     color: var(--light);
 }
 
-#logo {
-    margin: 0px 0px 0px 10px;
-    padding: 0px;
-    background: transparent;
-    width: 50px;
-    height: 50px;
-}
-
-#logo:focus {
-    box-shadow: none;
-}
-
-#logo:hover {
-    box-shadow: 0px 0px 5px 2px var(--light);
-    animation-delay: 0.5s;
-}
-
-/*
-note : that's for the js onclick navbar thing
-#links{
-    width: 0px;
-    display: none;
-} */
-
 /*profile*/
 #user_info {
     width: 100vw;
     max-width: 400px;
 }
 
-#user_info img,
-.answers img {
+img {
     border-radius: 500px;
     width: 150px;
     height: 150px;
     object-fit: cover;
+}
+
+.answers img {
+    width: 75px;
+    height: 75px;
+    margin: auto;
 }
 
 #edit {
@@ -337,7 +317,7 @@ input::file-selector-button{
 .list {
     align-content: center;
     width: 880px;
-    max-width: 100vw;
+    max-width: 88vw;
     position: relative;
     left: -20px;
     border-bottom: 1px solid var(--text-color);
@@ -365,7 +345,32 @@ select {
     text-align: center;
 }
 
+.deletePost {
+    justify-content: end;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
 
+
+/*dashboard*/
+.miniModal {
+    margin: auto;
+    border: 2px solid var(--text-color);
+}
+
+.miniModalElement {
+    margin: 0px;
+    border-radius: 0px;
+}
+
+dialog select {
+    border-radius: 0px;
+}
+
+#EditCat, #EditSubCat {
+    border-radius : 5px;
+}
 
 @media (min-width: 640px) {
     section {
@@ -374,5 +379,9 @@ select {
 
     .miniInput {
         width: 47%;
+    }
+
+    #nav{
+        flex-direction: row;
     }
 }
