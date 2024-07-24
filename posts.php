@@ -14,7 +14,12 @@ $postId = $_GET["id"];
 settype($postId, "integer");
 
 $count = Answer::countAns($bdd, $postId);
-$nbAns = $count[0]["COUNT(*)"];
+if(!empty($count)){
+    $nbAns = $count[0]["COUNT(*)"];
+}else{
+    $nbAns = 0;
+}
+
 
 $ansPerPage = 5;
 

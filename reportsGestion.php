@@ -7,7 +7,12 @@ $bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
 $count = Report::countReports($bdd);
-$nbReports = $count[0]["COUNT(*)"];
+if(!empty($count)){
+    $nbReports = $count[0]["COUNT(*)"];
+}else{
+    $nbReports = 0;
+}
+
 
 $reportPerPage = 3;
 
