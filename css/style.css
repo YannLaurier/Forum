@@ -1,10 +1,10 @@
 :root {
     --text-color: #657b83;
-    --dark: #503c25;
+    --dark: #073642;
     --background-color: #fdf6e3;
     --background-tsp: #fdf6e3ea;
     --light: #eee8d5;
-    --accent-1: #81aa8a;
+    --accent-1: #839496;
     --red: #dc322f;
 }
 
@@ -48,7 +48,7 @@ html {
     margin: 0px auto;
 }
 
-.bold {
+.bold, a {
     font-weight: bold;
 }
 
