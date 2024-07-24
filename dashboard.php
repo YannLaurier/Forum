@@ -12,6 +12,7 @@ $bdd = $bddManager->connectBDD();
 $cats = Cat::bringCats($bdd);
 $subcats = Subcat::bringSubCats($bdd);
 $allMods = User::bringMods($bdd);
+$allPseudos = User::bringUsersPseudos($bdd);
 
 $bddManager->disconnectBDD();
 ?>
@@ -46,6 +47,7 @@ $bddManager->disconnectBDD();
                         } ?>
                         . Ceci est maintenant un jeu de gestion. Bonne chance.
                     </p>
+                    <P><a href="reportsGestion.php">Gérer les signalements</a></P>
                 </section>
                 <section class="flex between wrap">
                     <?php if ($_SESSION["user"]["status"] === "admin") { ?>
@@ -112,12 +114,13 @@ $bddManager->disconnectBDD();
                             <h3><a href="cat.php?id=<?php echo $tab["id"]; ?>"><?php echo $tab["title"]; ?></a></h3>
                             <?php if ($_SESSION["user"]["status"] === "admin") { ?>
                                 <div class="flex gap-10">
-                                    <button type="button" class="tinyGuy" popovertarget="ModifCat<?php echo $tab["id"]?>">Modifier</button>
+                                    <button type="button" class="tinyGuy"
+                                        popovertarget="ModifCat<?php echo $tab["id"] ?>">Modifier</button>
                                     <form action="actions/deleteCat.php" method="POST">
                                         <button type="submit" name="DeleteCat" value="<?php echo $tab["id"]; ?>"
                                             class="tinyGuy">Supprimer</button>
                                     </form>
-                                    <dialog id="ModifCat<?php echo $tab["id"]?>" popover aria-modal="true">
+                                    <dialog id="ModifCat<?php echo $tab["id"] ?>" popover aria-modal="true">
                                         <div class="miniModal">
                                             <form action="actions/editCat.php" method="POST" class="flex">
                                                 <input class="pad-10 miniModalElement" name="newTitle" type="text"
@@ -136,12 +139,13 @@ $bddManager->disconnectBDD();
                                 <div class="flex between list pad-10">
                                     <p><a href="subcat.php?id=<?php echo $tab2["id"] ?>"><?php echo $tab2["title"] ?></a></p>
                                     <div class="flex gap-10">
-                                        <button type="button" popovertarget="ModifSubcat<?php echo $tab2["id"]?>" class="tinyGuy">Modifier</button>
+                                        <button type="button" popovertarget="ModifSubcat<?php echo $tab2["id"] ?>"
+                                            class="tinyGuy">Modifier</button>
                                         <form action="actions/deleteSubCat.php" method="POST">
                                             <button type="submit" name="DeleteSubCat" value="<?php echo $tab2["id"] ?>"
                                                 class="tinyGuy">Supprimer</button>
                                         </form>
-                                        <dialog id="ModifSubcat<?php echo $tab2["id"]?>" popover aria-modal="true">
+                                        <dialog id="ModifSubcat<?php echo $tab2["id"] ?>" popover aria-modal="true">
                                             <div class="miniModal">
                                                 <form action="actions/editSubCat.php" method="POST" class="flex">
                                                     <select id="MotherCat" name="MotherCat" required>
@@ -153,8 +157,10 @@ $bddManager->disconnectBDD();
                                                         unset($tab3);
                                                         ?>
                                                     </select>
-                                                    <input class="pad-10 miniModalElement" type="text" name="newSubTitle" placeholder="Nouveau nom pour ta sous-catégorie">
-                                                    <button class="pad-10 miniModalElement" type="submit" name="EditSubCat" class="tinyGuy" value="<?php echo $tab2["id"]; ?>">Confirmer</button>
+                                                    <input class="pad-10 miniModalElement" type="text" name="newSubTitle"
+                                                        placeholder="Nouveau nom pour ta sous-catégorie">
+                                                    <button class="pad-10 miniModalElement" type="submit" name="EditSubCat"
+                                                        class="tinyGuy" value="<?php echo $tab2["id"]; ?>">Confirmer</button>
                                                 </form>
                                             </div>
                                         </dialog>

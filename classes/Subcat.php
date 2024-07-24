@@ -93,7 +93,7 @@ class Subcat {
         }
     }
 
-    public static function editSubCat($bdd, $subCatName, $subCatId, $MotherCatId)
+    public static function editSubCat(PDO $bdd, $subCatName, $subCatId, $MotherCatId)
     {
         try {
             $bdd->beginTransaction();
@@ -103,6 +103,22 @@ class Subcat {
             $sql->bindParam(':MotherCatId', $MotherCatId);
             $sql->execute();
             $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function bringOneSubCat(PDO $bdd, $subCatId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT * FROM subcat WHERE id=:subCatId');
+            $sql->bindParam(':subCatId', $subCatId);
+            $sql->execute();
+            return $sql->fetch(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
             $bdd->rollBack();
             $error = fopen("error.txt", "w");

@@ -63,7 +63,7 @@ class Cat
         }
     }
 
-    public static function editCat($bdd, $catName, $catId)
+    public static function editCat(PDO $bdd, $catName, $catId)
     {
         try {
             $bdd->beginTransaction();
@@ -72,6 +72,22 @@ class Cat
             $sql->bindParam(':id', $catId);
             $sql->execute();
             $bdd->commit();
+        } catch (\Throwable $th) {
+            $bdd->rollBack();
+            $error = fopen("error.txt", "w");
+            $txt = $th->getMessage();
+            fwrite($error, $txt);
+            fclose($error);
+        }
+    }
+
+    public static function bringOneCat(PDO $bdd, $catId)
+    {
+        try {
+            $sql = $bdd->prepare('SELECT * FROM cat WHERE id=:catId');
+            $sql->bindParam(':catId', $catId);
+            $sql->execute();
+            return $sql->fetch(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
             $bdd->rollBack();
             $error = fopen("error.txt", "w");

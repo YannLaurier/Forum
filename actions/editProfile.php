@@ -24,11 +24,11 @@ if (isset($_POST["editProfile"])) {
     if (!empty($pass) && !empty($pseudo) && !empty($email) && !empty($description)) {
         echo "<br>I'm working FINE, MOM<br>";
         if (password_verify($pass, $_SESSION["user"]["Pass"]) === true) {
-            if ($email !== $thatGuy[0]["email"]) {
+            if ($email !== $thatGuy["email"]) {
                 $emailCheck = User::compareEmail($bdd, $email);
             }
 
-            if ($pseudo !== $thatGuy[0]["Pseudo"]) {
+            if ($pseudo !== $thatGuy["Pseudo"]) {
                 $pseudoCheck = User::comparePseudo($bdd, $pseudo);
             }
 

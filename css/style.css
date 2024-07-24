@@ -1,10 +1,10 @@
 :root {
     --text-color: #657b83;
-    --dark: #073642;
+    --dark: #503c25;
     --background-color: #fdf6e3;
     --background-tsp: #fdf6e3ea;
     --light: #eee8d5;
-    --accent-1: #93a1a1;
+    --accent-1: #81aa8a;
     --red: #dc322f;
 }
 
@@ -46,6 +46,10 @@ html {
     width: 900px;
     max-width: 90vw;
     margin: 0px auto;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 main>.container {
@@ -186,7 +190,7 @@ textarea {
 
 button {
     width: 50%;
-    margin: 10px auto 10px auto;
+    margin: auto;
     padding: 10px;
     border-radius: 25px;
     background-color: var(--accent-1);
@@ -201,6 +205,11 @@ button:focus {
     box-shadow: inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
+
+form>button {
+    margin : 10px auto;
+}
+
 /*messages to user*/
 .message {
     color: var(--red);
@@ -211,6 +220,10 @@ button:focus {
 .thisEmptyMessage {
     font-style: italic;
     text-align: center;
+}
+
+.disclaimer {
+    font-size : 13px;
 }
 
 /*navbar + footer*/
@@ -371,6 +384,13 @@ select {
 .miniModalElement {
     margin: 0px;
     border-radius: 0px;
+}
+
+.report {
+    background: transparent;
+    padding: 0px;
+    height: 25px;
+    width: 25px;
 }
 
 dialog select {

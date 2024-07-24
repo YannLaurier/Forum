@@ -100,21 +100,6 @@ class User
         return $result;
     }
 
-    public static function connectUser(PDO $bdd, $pseudo)
-    {
-        try {
-            $sql = $bdd->prepare("SELECT * FROM user WHERE Pseudo = :pseudo");
-            $sql->bindParam(':pseudo', $pseudo);
-            $sql->execute();
-            return $sql->fetch(PDO::FETCH_ASSOC);
-        } catch (\Throwable $th) {
-            $error = fopen("error.txt", "w");
-            $txt = $th->getMessage();
-            fwrite($error, $txt);
-            fclose($error);
-        }
-    }
-
     public static function bringMods(PDO $bdd)
     {
         try {
@@ -191,16 +176,14 @@ class User
         }
     }
 
-    public static function bringOneUser(PDO $bdd, $pseudo)
+    public static function bringOneUser(PDO $bdd, $pseudo) :array
     {
         try {
-            $sql = $bdd->prepare('SELECT *
-                                  FROM user
-                                  WHERE pseudo = :pseudo;');
+            $sql = $bdd->prepare('SELECT * FROM user WHERE pseudo = :pseudo;');
             $sql->bindParam(':pseudo', $pseudo);
             $sql->execute();
 
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $sql->fetch(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();
@@ -230,6 +213,22 @@ class User
             $txt = $th->getMessage();
             fwrite($error, $txt);
             fclose($error);
+        }
+    }
+
+    public static function bringUsersPseudos(PDO $bdd)
+    {
+        {
+            try {
+                $sql ='SELECT Pseudo, id FROM user';
+                $allPseudos = $bdd->query($sql);
+            return $allPseudos->fetchAll(PDO::FETCH_ASSOC);
+            } catch (\Throwable $th) {
+                $error = fopen("error.txt", "w");
+                $txt = $th->getMessage();
+                fwrite($error, $txt);
+                fclose($error);
+            }
         }
     }
 }

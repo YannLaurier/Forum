@@ -3,15 +3,16 @@ session_start();
 require_once "config\BddManager.php";
 require_once "classes\User.php";
 require_once "classes\Cat.php";
+require_once "classes\Subcat.php";
 
-$bdd = new BddManager();
+$bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
-$subcatId = $_GET["id"];
-settype($subcatId, "integer");
+$catId = $_GET["id"];
+settype($catId, "integer");
 
-$cats = Cat::bringCats($bdd);
-$subcats = Subcat::bringSubCats($bbd, $subcatId);
+$thatCat = Cat::bringOneCat($bdd, $catId);
+$subcats = Subcat::bringSubCats($bdd, $catId);
 
 $bddManager->disconnectBDD();
 ?>
@@ -22,11 +23,7 @@ $bddManager->disconnectBDD();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
-    foreach ($cats as $tab) {
-        if ($tab["id"] === $subcatId) {
-            echo $tab["title"];
-        }
-    }
+    echo $thatCat["title"];
     ?></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -36,30 +33,28 @@ $bddManager->disconnectBDD();
     <main>
         <div class="container">
             <h1><?php
-            foreach ($cats as $tab) {
-                if ($tab["id"] === $subcatId) {
-                    echo $tab["title"];
-                }
-            }
+            echo $thatCat["title"];
             ?></h1>
+            <p class="thisEmptyMessage">
+                Vous êtes ici :
+                <a href="index.php">Accueil</a>
+                >
+                <a href="cat.php?id=<?php echo $thatCat["id"]; ?>"><?php echo $thatCat["title"]; ?></a>
             <section>
                 <p class="p-10">
-                <?php
-                if(!empty($subcats)){
-                foreach ($subcats as $tab) {
-                        echo '<form action="actions/deleteSubCat.php" class="flex between list pad-10" method = "POST">
-                                <p>' . $tab["title"] . '</p>
-                                <div class="flex gap-10">
-                                    <button type="button" name="EditSubCat" value="' . $tab["title"] . '" class="tinyGuy">Modifier</button>
-                                    <button type="submit" name="DeleteSubCat" value="' . $tab["title"] . '" class="tinyGuy">Supprimer</button>
-                                </div>
-                            </form>';
+                    <?php
+                    if (!empty($subcats)) {
+                        foreach ($subcats as $tab) {
+                            ?>
+                        <p class="flex between list pad-10"><a href="subcat.php?id=<?php echo  $tab["id"] ; ?>"><?php echo $tab["title"]; ?></a></p>
+                        <?php
+                        }
+
+                    } else {
+                        ?>
+                    <p class='thisEmptyMessage'>Il n'y a pas encore de sous-catégories ici. Reviens dans un moment !</p><?php
                     }
-                    
-                }else{
-                    echo "<p class='thisEmptyMessage'>Il n'y a pas encore de sous-catégories ici. Reviens dans un moment !</p>";
-                }
-                ?>
+                    ?>
                 </p>
             </section>
         </div>

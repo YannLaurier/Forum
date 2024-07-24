@@ -6,16 +6,16 @@ require_once '../classes/Post.php';
 $bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
-var_dump($_POST);
-$subCatId = $_POST["subCat"];
-
 $postId = $_POST["deletePost"];
-$post = Post::bringOnePost($bdd, $postId);
-
 
 if (isset($_POST["deletePost"])) {
     Post::deletePost($bdd, $postId);
 }
 
 $bddManager->disconnectBDD();
-header("Location:../subcat.php?id=$subCatId");
+if (isset($_POST["subCat"])) {
+    $subCatId = $_POST["subCat"];
+    header("Location:../subcat.php?id=$subCatId");
+}else{
+    header("Location:../dashboard.php");
+}

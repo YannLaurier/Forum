@@ -91,7 +91,7 @@ class Post
             $sql = $bdd->prepare('SELECT *
                                   FROM posts
                                   WHERE FK_author_id = :id
-                                  ORDER BY publication_date ASC
+                                  ORDER BY publication_date DESC
                                   LIMIT 5');
             $sql->bindParam(':id', $userId);
             $sql->execute();
@@ -116,7 +116,7 @@ class Post
             $sql->bindParam(':postId', $postId);
             $sql->execute();
 
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $sql->fetch(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
             $error = fopen("error.txt", "w");
             $txt = $th->getMessage();

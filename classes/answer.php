@@ -53,15 +53,15 @@ class Answer {
         }
     }
 
-    public static function bringAns(PDO $bdd, $postId)
+    public static function bringAns(PDO $bdd, $postId, $firstEntry, $ansPerPage)
     {
         try {
-            $sql = $bdd->prepare('SELECT Pseudo, profilePicType, profilePicData, user.id AS userId, answers.id AS answerId, content, time, FK_post_id
+            $sql = $bdd->prepare("SELECT Pseudo, profilePicType, profilePicData, user.id AS userId, answers.id AS answerId, content, time, FK_post_id
                                 FROM user
                                 LEFT JOIN answers ON user.id = answers.FK_author_id
-                                WHERE answers.FK_post_id = :postId
-                                ORDER BY time ASC');
-            $sql->bindParam(':postId', $postId);
+                                WHERE answers.FK_post_id = $postId
+                                ORDER BY time ASC
+                                LIMIT $firstEntry , $ansPerPage");
             $sql->execute();
 
             return $sql->fetchAll(PDO::FETCH_ASSOC);

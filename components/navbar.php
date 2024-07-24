@@ -11,7 +11,7 @@
                 <li><a href="index.php">Accueil</a></li>
                 <?php if (isset($_SESSION["user"])) {
                     echo '<li><a href="actions\logout.php">Déconnexion</a></li>';
-                    if ($_SESSION["user"]["status"] == "admin" || $_SESSION["user"]["status"] == "modo") {
+                    if ($_SESSION["user"]["status"] === "admin" || $_SESSION["user"]["status"] === "modo") {
                         echo '<li><a href="dashboard.php">Dashboard</a></li>';
                     }
                 } else {

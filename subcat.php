@@ -5,15 +5,18 @@ require_once "classes/User.php";
 require_once "classes/Post.php";
 require_once "classes/Subcat.php";
 require_once "classes/Answer.php";
+require_once "classes/Cat.php";
 
 $bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
-$subcats = Subcat::bringSubCats($bdd);
-$posts = Post::bringPosts($bdd);
-
 $subCatId = $_GET["id"];
 settype($subCatId, "integer");
+
+$thatSubCat = Subcat::bringOneSubCat($bdd, $subCatId);
+$thatCat = Cat::bringOneCat($bdd, $thatSubCat["FK_mother_cat"]);
+$posts = Post::bringPosts($bdd);
+
 
 $bddManager->disconnectBDD();
 ?>
@@ -24,11 +27,7 @@ $bddManager->disconnectBDD();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
-    foreach ($subcats as $tab) {
-        if ($tab["id"] === $subCatId) {
-            echo $tab["title"];
-        }
-    }
+    $thatSubCat["title"];
     ?></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -38,12 +37,16 @@ $bddManager->disconnectBDD();
     <main>
         <div class="container">
             <h1><?php
-            foreach ($subcats as $tab) {
-                if ($tab["id"] === $subCatId) {
-                    echo $tab["title"];
-                }
-            }
+            echo $thatSubCat["title"];
             ?></h1>
+            <p class="thisEmptyMessage">
+                Vous êtes ici :
+                <a href="index.php">Accueil</a>
+                >
+                <a href="cat.php?id=<?php echo $thatCat["id"]; ?>"><?php echo $thatCat["title"]; ?></a>
+                >
+                <a href="subcat.php?id=<?php echo $thatSubCat["id"]; ?>"><?php echo $thatSubCat["title"]; ?></a>
+            </p>
             <section>
                 <p class="p-10"> Merci de bien vouloir payer attention aux topics existants et bien vérifier que votre
                     topic ne fait pas doublon avec un autre. Merci de bien vouloir contacter l'admin pour détails y

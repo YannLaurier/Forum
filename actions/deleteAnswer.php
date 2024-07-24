@@ -6,14 +6,18 @@ require_once '../classes/Answer.php';
 $bddManager = new BddManager();
 $bdd = $bddManager->connectBDD();
 
-var_dump($_POST);
-
-$postId = $_POST["postId"];
 $ansId = $_POST["DeleteAns"];
+settype($ansId, "integer");
+var_dump($_POST);
 
 if (isset($_POST["DeleteAns"])) {
     Answer::deleteAnswer($bdd, $ansId);
 }
 
 $bddManager->disconnectBDD();
-header("Location:../posts.php?id=$postId");
+//  if (isset($_POST["postId"])) {
+//      $postId = $_POST["postId"];
+//      header("Location:../posts.php?id=$postId");
+// } else {
+//      header("Location:../dashboard.php");
+// }
